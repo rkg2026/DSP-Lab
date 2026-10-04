@@ -1,0 +1,16 @@
+clc; close all; clear all;
+f1 = input('Enter the pass band edge freq f1 in Hz: ');
+f2 = input('Enter the stop band edge freq f2 in Hz: ');
+Fs = input('Enter sampling freq Fs in Hz: ');
+rp = input('Enter pass band variation of gain in dB rp: ');
+rs = input('Enter stop band attenuation in dB rs: ');
+wp = 2*pi*f1/Fs;
+ws = 2*pi*f2/Fs;
+wp = 2*tan(wp/2);
+ws = 2*tan(ws/2);
+[n,wp] = cheb1ord(wp,ws,rp,rs,'s');
+[num,den] = cheby1(n,rp,wp,'s');
+[b,a] = bilinear(num,den,1);
+disp ('The digital filter numerator coefficients are:'); disp(b);
+disp ('The digital filter denominator coefficients are:'); disp(a);
+freqz(b,a,512,Fs);
